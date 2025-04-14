@@ -11,6 +11,7 @@ const Filter = ({navigation}: any) => {
     const [priceRange, setPriceRange] = useState([0,10]);
     const [safetyRange, setSafetyRange] = useState([1,5]);
     const [selectedIngredient, setSelectedIngredient] = useState('');
+    const [productName, setProductName] = useState('');
     const [filteredPowders, setFilteredPowders] = useState(powders);
     const [open, setOpen] = useState(true);
     const [filterApplied, setFilterApplied] = useState(false);
@@ -54,7 +55,8 @@ const Filter = ({navigation}: any) => {
         const inPriceRange = ((!priceRange[0] || powder.price >= priceRange[0]) && (!priceRange[1] || powder.price <= priceRange[1]));
         const ingredientMatch = (!blacklist.length || !powder.ingredients.some(ingredient => blacklist.includes(ingredient.toLowerCase())));
         const safetyMatch = ((!safetyRange[0] || powder.safetyRating >= safetyRange[0]));
-        return inPriceRange && ingredientMatch && safetyMatch;
+        const nameMatch = ((!productName || powder.name.toLowerCase().indexOf(productName.toLowerCase()) > -1));
+        return inPriceRange && ingredientMatch && safetyMatch && nameMatch;
       });
       setFilteredPowders(filtered);
       setFilterApplied(true);
@@ -75,6 +77,12 @@ const Filter = ({navigation}: any) => {
           <ThemedView>
           <TouchableOpacity style={[styles.filterItem, !open && { height: 40 }]} activeOpacity={1}>
             <Text style={styles.title}>Filter Products</Text>
+              <TextInput 
+                placeholder="Product Name:"
+                value={productName}
+                onChangeText={setProductName}
+                style={styles.input}
+              />
               <Text style={styles.sliderText}> Set Max Price: ${priceRange[0]} - ${priceRange[1]}</Text>
               <Slider
                 style={styles.slider}

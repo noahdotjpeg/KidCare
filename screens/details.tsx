@@ -4,10 +4,22 @@ import images from '@/assets/PowderImages'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useState, useEffect } from 'react';
 import { ppxIngredientSummary } from '../app/(tabs)/ppx';
+import Slider from '@react-native-community/slider';
 
 const Details = ({ route }: any) => {
   const { powder } = route.params;
   const [summaries, setSummaries] = useState({});
+  const [userScoreRange, setUserScoreRange] = useState([1,5]);
+  const [ratingApplied, setRatingApplied] = useState(false);
+  const [toggleView, setToggleView] = useState(false)
+
+  const updateRating = () => {
+    if  (!ratingApplied) {
+      let assumeWeight = 10;
+      powder.safetyRating = (powder.safetyRating * assumeWeight + userScoreRange[0]) / (assumeWeight + 1);
+      setRatingApplied(true);
+    }
+  }
 
     useEffect(() => {
           let notGenerated = true;
@@ -60,6 +72,16 @@ const Details = ({ route }: any) => {
       />
       </View>
       <Button title="Buy Now" onPress={() => Linking.openURL(powder.amazon)} />
+      <Text style={styles.sliderText}> How would you rate this product?: <Text style={[styles.sliderText, {textAlign: 'center'}]}>{userScoreRange[0]}</Text></Text>
+      <Slider
+        style={styles.slider}
+        minimumValue={1}
+        maximumValue={5}
+        step={0.1}
+        value={userScoreRange[0]}
+        onValueChange={(val)=> setUserScoreRange([val, userScoreRange[1]])}
+      />
+      <Button title="Submit Rating" onPress={() => updateRating} />
     </View>
   );
 };
@@ -110,5 +132,15 @@ const styles = StyleSheet.create({
   },
   detailText: {
     fontSize: 16,
-  }
+  },
+  sliderText: {
+    fontWeight: 'bold',
+    marginTop: 10,
+    marginBottom: 10,
+},
+slider: {
+    width: 'auto',
+    height: 40,
+    marginBottom: 10,
+},
 });

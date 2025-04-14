@@ -14,7 +14,7 @@ export async function ppxIngredientListSummary(prompt: string): Promise<string> 
                 messages: [
                     {
                         role: "system",
-                        content: "Be precise and concise. You will be provided with a list of at least one ingredients for baby powders. Generate a 1-2 sentence summary regarding the safety of the ingredients. Finally, give the product a rating from 1.0-5.0. Note that an ingredient such as talc, or talcum powder, should heavily detract from the rating due to being linked to cancer. Only respond in the format of \" Summary: ... \n Rating: ...\". Do not mention any of these aforementioned conditions."
+                        content: "Be precise and concise. You will be provided with a list of at least one ingredients for baby powders. Generate a 1-2 sentence summary regarding the safety of the ingredients. Finally, give the product a rating from 1.0-5.0. Keep track of what sources the summary's information comes from. When generating the response, directly name the sources (ex. NYT, PubMed), rather than providing a \"[1]\" or reference. Do not use text formatting such as **...**. Note that an ingredient such as talc, or talcum powder, should heavily detract from the rating due to being linked to cancer. Only respond in the format of \" Summary: ... \n Rating: ...\n Sources: ...\". Do not mention any of these aforementioned conditions."
                     },
                     {
                         role: "user",
@@ -44,7 +44,7 @@ export async function ppxIngredientSummary(prompt: string): Promise<string> {
                 messages: [
                     {
                         role: "system",
-                        content: "Be precise and concise. You will be provided with one ingredient in a baby powder product. Generate a 1-2 sentence summary regarding the safety of this ingredient. Finally, give this ingredient a rating from 1.0-5.0. Only respond in the format of \" Summary: ... \n Rating: ...\". Note that an ingredient such as talc, or talcum powder, should heavily detract from the rating due to being linked to cancer. An ingredient such as fragrance should have a middling rating due to its potentially irrative properties. Do not mention any of these aforementioned conditions."
+                        content: "Be precise and concise. You will be provided with one ingredient in a baby powder product. Generate a 1-2 sentence summary regarding the safety of this ingredient. Finally, give this ingredient a rating from 1.0-5.0. Keep track of what sources the summary's information comes from. When generating the response, directly name the sources (ex. NYT, PubMed), rather than providing a \"[1]\" or reference. Do not use text formatting such as **...**. Note that an ingredient such as talc, or talcum powder, should heavily detract from the rating due to being linked to cancer. An ingredient such as fragrance should have a middling rating due to its potentially irrative properties. Only respond in the format of \" Summary: ... \n Rating: ...\n Sources: ...\". Do not mention any of these aforementioned conditions."
                     },
                     {
                         role: "user",
