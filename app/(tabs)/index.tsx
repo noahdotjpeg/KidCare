@@ -27,6 +27,9 @@ export default function HomeScreen() {
         <ThemedText>
           We assign a safety rating to all of the products we support; this ranges from <ThemedText style={{fontWeight:"bold"}}>1 - 5</ThemedText>. A lower score indicates a product that contains one or multiple ingredients that are well-known to cause health issues. A higher score indicates a product that doesn't contain ingredients like those.
         </ThemedText>
+        <ThemedText>
+          We use Perplexity in order to generate source-driven summaries for the products we list; this way, you can always know where the information is coming from.
+        </ThemedText>
       </ThemedView>
     </ParallaxScrollView>
   );

@@ -11,41 +11,43 @@ const Details = ({ route }: any) => {
   const [summaries, setSummaries] = useState({});
   const [userScoreRange, setUserScoreRange] = useState([1,5]);
   const [ratingApplied, setRatingApplied] = useState(false);
-  const [toggleView, setToggleView] = useState(false)
-
+  const [toggleView, setToggleView] = useState(false);
+  const [open, setOpen] = useState(true);
+  
   const updateRating = () => {
     if  (!ratingApplied) {
       let assumeWeight = 10;
       powder.safetyRating = (powder.safetyRating * assumeWeight + userScoreRange[0]) / (assumeWeight + 1);
       setRatingApplied(true);
     }
+    setOpen(!open);
   }
 
     useEffect(() => {
-          let notGenerated = true;
-          const generateSummaries = async () => {
-            const summaryPromises = powder.ingredients.map(async (ingredient: string) => {
-              try {
-                const prompt = ingredient;
-                const summary = await ppxIngredientSummary(prompt);
-                return { id: powder.ingredients.indexOf(ingredient), summary };
-              } catch (error) {
-                return { id: powder.ingredients.indexOf(ingredient), summary: 'Summary not available' };
-              }
-            });
-            const results = await Promise.all(summaryPromises);
-            if (notGenerated) {
-              setSummaries(prev => ({
-                ...prev,
-                ...Object.fromEntries(results.map(powder => [powder.id, powder.summary]))
-              }));
-            }
-          };
-          generateSummaries();
-          return () => {
-            notGenerated = false;
-          };
-      }, []);
+      let notGenerated = true;
+      const generateSummaries = async () => {
+        const summaryPromises = powder.ingredients.map(async (ingredient: string) => {
+          try {
+            const prompt = ingredient;
+            const summary = await ppxIngredientSummary(prompt);
+            return { id: powder.ingredients.indexOf(ingredient), summary };
+          } catch (error) {
+            return { id: powder.ingredients.indexOf(ingredient), summary: 'Summary not available' };
+          }
+        });
+        const results = await Promise.all(summaryPromises);
+        if (notGenerated) {
+          setSummaries(prev => ({
+            ...prev,
+            ...Object.fromEntries(results.map(powder => [powder.id, powder.summary]))
+          }));
+        }
+      };
+      generateSummaries();
+      return () => {
+        notGenerated = false;
+      };
+    }, []);
 
   return (
     <View style={styles.container}>
@@ -71,17 +73,21 @@ const Details = ({ route }: any) => {
           )}
       />
       </View>
-      <Button title="Buy Now" onPress={() => Linking.openURL(powder.amazon)} />
-      <Text style={styles.sliderText}> How would you rate this product?: <Text style={[styles.sliderText, {textAlign: 'center'}]}>{userScoreRange[0]}</Text></Text>
-      <Slider
-        style={styles.slider}
-        minimumValue={1}
-        maximumValue={5}
-        step={0.1}
-        value={userScoreRange[0]}
-        onValueChange={(val)=> setUserScoreRange([val, userScoreRange[1]])}
-      />
-      <Button title="Submit Rating" onPress={() => updateRating} />
+      <Button title="Buy Now" onPress={() => {Linking.openURL(powder.amazon); setOpen(true);}} />
+      {!open && (
+        <View>
+        <Text style={styles.sliderText}> How would you rate this product?: {userScoreRange[0]}</Text>
+        <Slider
+          style={styles.slider}
+          minimumValue={1}
+          maximumValue={5}
+          step={0.1}
+          value={userScoreRange[0]}
+          onValueChange={(val)=> setUserScoreRange([val, userScoreRange[1]])}
+        />
+        <Button title="Submit Rating" onPress={() => updateRating} />
+        </View>
+        )}
     </View>
   );
 };
