@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Platform, Button, View } from 'react-native';
+import { Image, StyleSheet, Platform, Button, View, Text } from 'react-native';
 
 import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
@@ -10,6 +10,7 @@ import {chat} from '@/app/(tabs)/ppx'
 export default function HomeScreen() {
   const [userText, setUserText] = useState('');
   const [chatOut, setChatOut] = useState('');
+  const [buttonPressed, setButtonPressed] = useState(false);
   const doPromptStuff = () => {
     const generateSummary = async () => {
         try {
@@ -33,6 +34,9 @@ export default function HomeScreen() {
         <ThemedText style={{color:'#000000'}} type="title">Chat</ThemedText>
       </View>
       <View style={styles.stepContainer}>
+        {!chatOut && buttonPressed && (
+          <Text>Thinking...</Text>
+        )}
         <ThemedText style={styles.response}>{chatOut || ''}</ThemedText>
 
         <TextInput
@@ -44,6 +48,7 @@ export default function HomeScreen() {
         <Button title="Chat" onPress={() => {
             setChatOut('');
             doPromptStuff();
+            setButtonPressed(true);
         }}
         />
         
