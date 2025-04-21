@@ -1,4 +1,4 @@
-const API_KEY = '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';
+const API_KEY = '';
 const API_URL = 'https://api.perplexity.ai/chat/completions';
 
 export async function ppxIngredientListSummary(prompt: string): Promise<string> {
