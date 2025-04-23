@@ -81,7 +81,7 @@ export async function chat(prompt: string): Promise<string> {
                         content: prompt
                     }
                 ],
-                max_tokens: 200,
+                max_tokens: 400,
             }),
         });
         const data = await response.json();

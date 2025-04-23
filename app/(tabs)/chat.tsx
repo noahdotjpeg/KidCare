@@ -4,7 +4,7 @@ import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
-import { TextInput } from 'react-native-gesture-handler';
+import { ScrollView, TextInput } from 'react-native-gesture-handler';
 import { useState, useEffect } from 'react';
 import {chat} from '@/app/(tabs)/ppx'
 export default function HomeScreen() {
@@ -37,8 +37,9 @@ export default function HomeScreen() {
         {!chatOut && buttonPressed && (
           <Text>Thinking...</Text>
         )}
+        <ScrollView>
         <ThemedText style={styles.response}>{chatOut || ''}</ThemedText>
-
+        </ScrollView>
         <TextInput
         placeholder="Enter your question here!"
         value={userText}
